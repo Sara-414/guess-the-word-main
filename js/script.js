@@ -5,10 +5,10 @@ const wordProgress = document.querySelector (".word-in-progress");
 const remainingGuessesElement = document.querySelector (".remaining");
 const remainingGuessSpan = document.querySelector (".remaining span");
 const message = document.querySelector (".message");
-const playAgainButton = document.querySelector (".play-again-hide");
+const playAgainButton = document.querySelector (".play-again");
 
 let word = "magnolia";
-const guessedLetters = [];
+let guessedLetters = [];
 let remainingGuesses = 8;
 
 const getWord = async function () {
@@ -108,6 +108,7 @@ const updateGuessesRemaining = function (guess) {
 
     if (remainingGuesses === 0) {
         message.innerHTML = `Game over! The word was <span class="highlight">${word}</span>.`;
+        startOver();
     } else if (remainingGuesses === 1) {
         remainingGuessSpan.innerText = `${remainingGuesses} guess`;
     } else {
@@ -118,6 +119,31 @@ const updateGuessesRemaining = function (guess) {
 const validateWonGame = function () {
     if (word.toUpperCase() === wordProgress.innerText) {
         message.classList.add("win");
-        message.innerHTML = `<p class="highlight">You guessed correct the word! Congrats!</p>`;
+        message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
+        
+        startOver();
     }
 };
+
+const startOver = function () {
+    guessButton.classList.add("hide");
+    remainingGuessesElement.classList.add("hide");
+    guessedLettersElement.classList.add("hide");
+    playAgainButton.classList.remove("hide");
+};
+
+playAgainButton.addEventListener("click", function () {
+    message.classList.remove("win");
+    guessedLetters = [];
+    remainingGuesses = 8;
+    remainingGuessSpan.innerText = `${remainingGuesses} guesses`;
+    guessedLettersElement.innerHTML = "";
+    message.innerText = "";
+
+    getWord();
+
+    guessButton.classList.remove("hide");
+    playAgainButton.classList.add("hide");
+    remainingGuessesElement.classList.remove("hide");
+    guessedLettersElement.classList.remove("hide");
+});
